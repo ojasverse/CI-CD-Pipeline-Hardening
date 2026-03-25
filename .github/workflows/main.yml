@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Secure CI Pipeline
 
 on: [push]
 
@@ -7,11 +7,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Run App
-        run: node app.js
+      - run: npm install
 
-      - name: Login (BAD PRACTICE)
-        run: echo "Password is mysecret123"
+      - run: node app.js
+
+      - run: npm audit
+
+      - name: Secure Secret Usage
+        run: echo "Running securely"
+        env:
+          PASSWORD: ${{ secrets.APP_PASSWORD }}
